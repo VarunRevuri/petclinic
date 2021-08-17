@@ -8,11 +8,6 @@ pipeline {
     }
     
     stages {
-        stage('Checkout code') {
-            steps {
-                git branch: 'feature/JIRA-143', url: 'https://github.com/akmaharshi/petclinic.git'
-            }
-        }
     
         stage('Maven Build') {
             steps {
