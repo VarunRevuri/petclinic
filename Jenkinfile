@@ -15,21 +15,25 @@ pipeline {
             }
         }
 
-        stage('Junit tests') {
-            steps {
-                junit 'target/surefire-reports/*.xml'
-            }
-        }
+        stage('Post Build Actions') {
+            parallel {
+                stage('Junit tests') {
+                    steps {
+                        junit 'target/surefire-reports/*.xml'
+                    }
+                }
 
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'target/*.?ar', followSymlinks: false
-            }
-        }
+                stage('Archive Artifacts') {
+                    steps {
+                        archiveArtifacts artifacts: 'target/*.?ar', followSymlinks: false
+                    }
+                }
         
-        stage('Nexus Uploader') {
-            steps {
-                nexusArtifactUploader artifacts: [[artifactId: 'spring-petclinic', classifier: '', file: 'target/petclinic.war', type: 'war']], credentialsId: 'nexusCred', groupId: 'org.springframework.samples', nexusUrl: '18.221.115.82:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-snapshots', version: '4.2.0-SNAPSHOT'
+                stage('Nexus Uploader') {
+                    steps {
+                        nexusArtifactUploader artifacts: [[artifactId: 'spring-petclinic', classifier: '', file: 'target/petclinic.war', type: 'war']], credentialsId: 'nexusCred', groupId: 'org.springframework.samples', nexusUrl: '18.221.115.82:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-snapshots', version: '4.2.0-SNAPSHOT'
+                    }
+                }
             }
         }
     }
