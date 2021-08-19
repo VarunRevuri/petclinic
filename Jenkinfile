@@ -1,16 +1,19 @@
 pipeline {
-    agent { 
-        label 'linux'
-    }
+    agent any
     
     tools {
         maven 'M3.8' 
+    }
+    
+    environment {
+        project_path='spring-boot-samples/spring-boot-sample-atmosphere'
     }
     
     stages {
     
         stage('Maven Build') {
             steps {
+                echo "$project_path"
                 sh "mvn clean package"
             }
         }
