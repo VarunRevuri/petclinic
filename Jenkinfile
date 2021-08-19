@@ -10,7 +10,16 @@ pipeline {
     }
     
     stages {
-    
+        stage('Example SSH Username with private key') {
+            environment {
+                SSH_CREDS = credentials('ec2Cred')
+            }
+            steps {
+                sh 'echo "SSH private key is located at $SSH_CREDS"'
+                sh 'echo "SSH user is $SSH_CREDS_USR"'
+                sh 'echo "SSH passphrase is $SSH_CREDS_PSW"'
+            }
+        }
         stage('Maven Build') {
             steps {
                 echo "$project_path"
